@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phénix Philosophique</title>
+<meta name="description" content="Découvrir et progresser en philosophie : forum, glossaire des philosophes, œuvres par thématiques et progression jusqu'au niveau 100.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#111; --paper:#faf9f6; --mute:#6b6b6b; --line:#e2dfd8; --soft:#f1efea;
+  --serif:"Shippori Mincho","Times New Roman",serif;
+  --sans:"Zen Kaku Gothic New",system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.75;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+a{color:inherit}
+button{font:inherit;color:inherit}
+main{flex:1;width:100%;max-width:1120px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+[hidden]{display:none!important}
+
+/* ---------- En-tête ---------- */
+.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:20px;padding:12px clamp(16px,4vw,48px);background:rgba(250,249,246,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:1.08rem;letter-spacing:.05em;white-space:nowrap}
+.brand svg{width:30px;height:30px}
+nav{display:flex;gap:2px;margin-left:auto}
+nav a{text-decoration:none;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;padding:8px 12px;color:var(--mute);border-bottom:1px solid transparent;transition:.2s}
+nav a:hover,nav a.active{color:var(--ink);border-bottom-color:var(--ink)}
+#authBox{display:flex;align-items:center;gap:10px}
+.me{display:flex;align-items:center;gap:8px;text-decoration:none;line-height:1.1}
+.me small{display:block;color:var(--mute);font-size:.72rem;letter-spacing:.08em}
+.avatar{width:32px;height:32px;border-radius:50%;border:1px solid var(--ink);display:grid;place-items:center;font-family:var(--serif);font-weight:600;overflow:hidden;background:var(--paper);flex:none}
+.avatar img{width:100%;height:100%;object-fit:cover;filter:grayscale(1)}
+.burger{display:none;background:none;border:1px solid var(--line);width:38px;height:38px;cursor:pointer;font-size:1.1rem}
+.demo{background:var(--ink);color:var(--paper);text-align:center;font-size:.78rem;letter-spacing:.06em;padding:7px 16px}
+
+/* ---------- Boutons ---------- */
+.btn{display:inline-flex;align-items:center;gap:8px;font-size:.84rem;letter-spacing:.08em;border:1px solid var(--ink);background:transparent;padding:10px 20px;cursor:pointer;text-decoration:none;transition:background .2s,color .2s}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn.solid:hover{background:transparent;color:var(--ink)}
+.btn.sm{padding:6px 12px;font-size:.76rem}
+.btn.ghost{border-color:var(--line);color:var(--mute)}
+.btn:disabled{opacity:.35;cursor:not-allowed;background:transparent;color:var(--ink)}
+
+/* ---------- Accueil ---------- */
+.hero{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(24px,6vw,80px);align-items:center;padding:clamp(48px,10vw,120px) 0 clamp(40px,8vw,90px);position:relative}
+.enso-big{width:clamp(180px,30vw,340px);height:auto}
+.enso-big path{stroke-dasharray:100;stroke-dashoffset:100;animation:draw 2.4s cubic-bezier(.6,0,.2,1) .2s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.vertical{position:absolute;right:0;top:clamp(48px,10vw,120px);writing-mode:vertical-rl;font-family:var(--serif);font-size:.95rem;letter-spacing:.6em;color:var(--mute)}
+.kicker{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--mute);margin-bottom:14px}
+h1{font-family:var(--serif);font-weight:800;font-size:clamp(2.6rem,7vw,5rem);line-height:1.05;letter-spacing:.01em;margin-bottom:24px}
+.lead{max-width:34em;color:#333;font-size:1.04rem;margin-bottom:32px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink)}
+.pillar{padding:28px 24px 32px 0;text-decoration:none;border-right:1px solid var(--line);padding-left:24px;transition:background .2s}
+.pillar:first-child{padding-left:0}
+.pillar:last-child{border-right:0}
+.pillar:hover h3{text-decoration:underline;text-underline-offset:6px}
+.pillar .k{font-family:var(--serif);font-size:1.6rem;color:var(--mute)}
+.pillar h3{font-family:var(--serif);font-size:1.2rem;margin:6px 0 6px}
+.pillar p{font-size:.88rem;color:var(--mute)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,64px);padding:clamp(56px,8vw,96px) 0}
+.quiz h3{font-family:var(--serif);font-size:1.35rem;line-height:1.4;margin-bottom:20px}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;background:transparent;border:1px solid var(--line);padding:12px 16px;cursor:pointer;transition:.2s;font-size:.94rem}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt:disabled{cursor:default}
+.opt.right{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.opt.wrong{text-decoration:line-through;color:var(--mute)}
+.quiz-note{margin-top:14px;font-size:.86rem;color:var(--mute)}
+.about p{margin-bottom:14px;color:#333}
+.about .sign{font-family:var(--serif);font-size:1.4rem;margin-top:8px}
+.stats{display:flex;gap:36px;margin-top:28px;border-top:1px solid var(--line);padding-top:20px}
+.stats b{display:block;font-family:var(--serif);font-size:2rem;line-height:1}
+.stats span{font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+
+/* ---------- Sections ---------- */
+.sec-head{display:grid;grid-template-columns:auto 1fr;column-gap:24px;align-items:end;padding:clamp(40px,7vw,80px) 0 28px;border-bottom:1px solid var(--ink);margin-bottom:28px}
+.sec-head .num{grid-row:span 2;font-family:var(--serif);font-size:clamp(3rem,7vw,4.6rem);line-height:.9;color:var(--ink)}
+.sec-head h2{font-family:var(--serif);font-size:clamp(1.8rem,4vw,2.6rem);font-weight:600;line-height:1.1}
+.sec-head p{color:var(--mute);font-size:.95rem}
+.toolbar{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin-bottom:24px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:transparent;border:1px solid var(--line);padding:5px 12px;font-size:.78rem;letter-spacing:.06em;cursor:pointer;transition:.2s}
+.chip:hover{border-color:var(--ink)}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.search{flex:1;min-width:220px;max-width:420px;border:0;border-bottom:1px solid var(--ink);background:transparent;padding:10px 2px;font:inherit;font-size:1rem;outline:none}
+.search::placeholder{color:#aaa}
+select{font:inherit;font-size:.84rem;border:1px solid var(--line);background:var(--paper);padding:6px 10px}
+.counter{font-size:.8rem;color:var(--mute);letter-spacing:.06em}
+.muted{color:var(--mute)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;padding-bottom:80px}
+.card{position:relative;text-align:left;background:var(--paper);border:1px solid var(--line);padding:22px 22px 20px;cursor:pointer;transition:border-color .2s,transform .2s;display:flex;flex-direction:column;gap:6px}
+.card:hover{border-color:var(--ink);transform:translateY(-2px)}
+.card h3{font-family:var(--serif);font-size:1.18rem;line-height:1.3}
+.card .meta{font-size:.78rem;color:var(--mute);letter-spacing:.04em}
+.card p.desc{font-size:.88rem;color:#444;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card.done::after{content:"済";position:absolute;top:14px;right:14px;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--paper);font-family:var(--serif);font-size:.8rem;display:grid;place-items:center}
+.tag{display:inline-block;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;border:1px solid var(--ink);padding:1px 8px;align-self:flex-start}
+.tag.light{border-color:var(--line);color:var(--mute)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0}
+
+.threads{display:flex;flex-direction:column;padding-bottom:80px}
+.thread{display:flex;justify-content:space-between;gap:20px;align-items:center;text-align:left;background:transparent;border:0;border-bottom:1px solid var(--line);padding:20px 4px;cursor:pointer;transition:padding .2s}
+.thread:hover{padding-left:12px}
+.thread h3{font-family:var(--serif);font-size:1.15rem;margin:6px 0 2px}
+.thread .meta{font-size:.78rem;color:var(--mute)}
+.count{font-family:var(--serif);font-size:1.6rem;text-align:center;line-height:1;flex:none}
+.count small{display:block;font-family:var(--sans);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-top:4px}
+.empty{padding:60px 0;text-align:center;color:var(--mute)}
+
+/* ---------- Progression ---------- */
+.prog{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,5vw,64px);padding-bottom:80px}
+.level{display:flex;align-items:center;gap:28px}
+.level-ring{position:relative;width:150px;height:150px;flex:none}
+.level-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.level-ring .n{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-family:var(--serif);font-size:3rem;line-height:1}
+.level-ring .n small{display:block;font-family:var(--sans);font-size:.62rem;letter-spacing:.2em;color:var(--mute)}
+.rank{font-family:var(--serif);font-size:1.8rem}
+.bar{height:4px;background:var(--line);margin:18px 0 8px}
+.bar i{display:block;height:100%;background:var(--ink);transition:width .8s}
+.kv{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);margin-top:28px}
+.kv div{padding:16px 0}
+.kv b{font-family:var(--serif);font-size:1.7rem;display:block;line-height:1.1}
+.kv span{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+h4.sub{font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mute);margin:32px 0 14px;font-weight:500}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:12px}
+.badge{text-align:center;opacity:.28}
+.badge.on{opacity:1}
+.badge .seal{width:58px;height:58px;margin:0 auto 6px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-size:1.5rem}
+.badge.on .seal{background:var(--ink);color:var(--paper)}
+.badge b{display:block;font-size:.8rem}
+.badge small{font-size:.7rem;color:var(--mute);line-height:1.3;display:block}
+.history{list-style:none}
+.history li{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:9px 0;font-size:.88rem}
+.history li b{font-family:var(--serif);white-space:nowrap}
+.ranks{list-style:none;font-size:.86rem}
+.ranks li{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line);color:var(--mute)}
+.ranks li.cur{color:var(--ink);font-weight:700}
+
+/* ---------- Modale, formulaires, toasts ---------- */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(17,17,17,.5);display:grid;place-items:center;padding:16px;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+.modal-card{position:relative;background:var(--paper);width:min(680px,100%);max-height:88vh;overflow:auto;padding:clamp(24px,5vw,44px);border-top:3px solid var(--ink)}
+.close{position:absolute;top:12px;right:14px;background:none;border:0;font-size:1.6rem;cursor:pointer;line-height:1;color:var(--mute)}
+.close:hover{color:var(--ink)}
+.m-title{font-family:var(--serif);font-size:clamp(1.5rem,4vw,2rem);line-height:1.25;margin:10px 0 4px}
+.m-meta{font-size:.82rem;color:var(--mute);margin-bottom:20px}
+.post-body{white-space:pre-wrap;word-wrap:break-word;font-size:.96rem;color:#222}
+.reply{border-left:1px solid var(--ink);padding:4px 0 4px 16px;margin-bottom:18px}
+.reply .meta{font-size:.78rem;color:var(--mute);margin-bottom:4px}
+.form{display:flex;flex-direction:column;gap:14px;margin-top:20px}
+.form label{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);display:flex;flex-direction:column;gap:6px}
+.form input,.form textarea,.form select{font:inherit;font-size:.96rem;border:1px solid var(--line);background:#fff;padding:10px 12px;outline:none;text-transform:none;letter-spacing:0;color:var(--ink)}
+.form input:focus,.form textarea:focus{border-color:var(--ink)}
+.form textarea{min-height:130px;resize:vertical}
+.form .row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.idea{font-family:var(--serif);font-size:1.12rem;line-height:1.7;border-left:2px solid var(--ink);padding-left:18px;margin:18px 0}
+.linked{list-style:none;margin-top:8px}
+.linked li{padding:6px 0;border-bottom:1px solid var(--line);font-size:.9rem}
+#toasts{position:fixed;bottom:20px;right:20px;z-index:60;display:flex;flex-direction:column;gap:8px;align-items:flex-end;pointer-events:none}
+.toast{background:var(--ink);color:var(--paper);padding:10px 16px;font-size:.84rem;letter-spacing:.04em;animation:up .3s;transition:opacity .4s,transform .4s}
+.toast.big{font-family:var(--serif);font-size:1.05rem;padding:14px 20px;border:1px solid var(--paper);outline:1px solid var(--ink)}
+.toast.out{opacity:0;transform:translateY(8px)}
+@keyframes up{from{opacity:0;transform:translateY(10px)}}
+
+footer{border-top:1px solid var(--line);padding:26px clamp(16px,4vw,48px);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:.78rem;color:var(--mute);letter-spacing:.04em}
+footer button{background:none;border:0;cursor:pointer;text-decoration:underline;color:var(--mute);font-size:.78rem}
+
+/* ---------- Responsive ---------- */
+@media (max-width:900px){
+  .pillars{grid-template-columns:1fr 1fr}
+  .pillar:nth-child(2){border-right:0}
+  .pillar:nth-child(3){padding-left:0}
+  .pillar:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .split,.prog{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .burger{display:block;margin-left:auto}
+  nav{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;background:var(--paper);border-bottom:1px solid var(--ink);padding:8px 16px 16px}
+  nav.open{display:flex}
+  nav a{padding:12px 4px;border-bottom:1px solid var(--line)}
+  .brand span{display:none}
+  .hero{grid-template-columns:1fr;text-align:left}
+  .enso-big{width:150px}
+  .vertical{display:none}
+  .me span{display:none}
+  .level{flex-direction:column;align-items:flex-start}
+}
+@media (max-width:480px){
+  .pillars{grid-template-columns:1fr}
+  .pillar{padding-left:0!important;border-right:0!important;border-bottom:1px solid var(--line)}
+  .stats{gap:22px}
+  #authBox .btn.ghost{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.enso-big path{stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="brush"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.2"/></filter>
+</svg>
+
+<header class="top">
+  <a href="#accueil" class="brand" aria-label="Phénix Philosophique — accueil">
+    <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M74 24 A36 36 0 1 0 86 52" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" filter="url(#brush)"/></svg>
+    <span>Phénix Philosophique</span>
+  </a>
+  <button class="burger" id="burger" aria-label="Menu">☰</button>
+  <nav id="nav">
+    <a href="#accueil">Accueil</a>
+    <a href="#forum">Forum</a>
+    <a href="#glossaire">Glossaire</a>
+    <a href="#oeuvres">Œuvres</a>
+    <a href="#progression">Progression</a>
+  </nav>
+  <div id="authBox"></div>
+</header>
+<div class="demo" id="demoBanner" hidden>Mode démonstration — les données restent dans votre navigateur. Configurez Firebase pour activer la connexion Google et le forum partagé.</div>
+
+<main>
+  <!-- ACCUEIL -->
+  <section id="accueil" class="view">
+    <div class="hero">
+      <svg class="enso-big" viewBox="0 0 100 100" aria-hidden="true"><path pathLength="100" d="M72 20 A36 36 0 1 0 87 50" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" filter="url(#brush)"/></svg>
+      <div>
+        <p class="kicker">Découvrir · Questionner · Progresser</p>
+        <h1>Phénix<br>Philosophique</h1>
+        <p class="lead">Faire découvrir et progresser en philosophie : tels sont les objectifs de ce site. Je suis Egor et je partage ici ma passion pour la philosophie.</p>
+        <div class="cta" id="heroCta"></div>
+      </div>
+      <div class="vertical" aria-hidden="true">鳳凰 · 哲学</div>
+    </div>
+
+    <div class="pillars">
+      <a class="pillar" href="#forum"><span class="k">一</span><h3>Forum</h3><p>Ouvrir une discussion, débattre, poser ses questions.</p></a>
+      <a class="pillar" href="#glossaire"><span class="k">二</span><h3>Glossaire</h3><p>Rechercher les philosophes et suivre ceux que l'on a étudiés.</p></a>
+      <a class="pillar" href="#oeuvres"><span class="k">三</span><h3>Œuvres</h3><p>Des ouvrages classés par thématiques et par niveau.</p></a>
+      <a class="pillar" href="#progression"><span class="k">四</span><h3>Progression</h3><p>Gagner de l'expérience, jusqu'au niveau 100.</p></a>
+    </div>
+
+    <div class="split">
+      <div class="quiz" id="quizBox"></div>
+      <div class="about">
+        <p class="kicker">À propos</p>
+        <p>La philosophie n'est pas réservée aux spécialistes. Elle commence par une question simple : « pourquoi ? ». Ce site propose un chemin progressif, des grandes figures de l'Antiquité aux penseurs du XXe siècle, sans oublier les sagesses d'Asie.</p>
+        <p>Lisez, questionnez, échangez avec les autres membres. Chaque pas compte et vous fait gagner de l'expérience.</p>
+        <p class="sign">— Egor</p>
+        <div class="stats" id="homeStats"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORUM -->
+  <section id="forum" class="view" hidden>
+    <header class="sec-head"><span class="num">一</span><h2>Forum</h2><p>Ouvrez une discussion ou répondez aux autres membres. +15 XP par sujet, +5 XP par réponse (100 XP maximum par jour).</p></header>
+    <div class="toolbar">
+      <div class="chips" id="forumCats"></div>
+      <button class="btn solid" id="newThreadBtn">Ouvrir une discussion</button>
+    </div>
+    <div class="threads" id="threadList"></div>
+  </section>
+
+  <!-- GLOSSAIRE -->
+  <section id="glossaire" class="view" hidden>
+    <header class="sec-head"><span class="num">二</span><h2>Glossaire des philosophes</h2><p>Recherchez un penseur, un courant ou un concept. Marquez un philosophe comme étudié : +20 XP.</p></header>
+    <div class="toolbar">
+      <input class="search" id="gSearch" type="search" placeholder="Rechercher : Kant, stoïcisme, liberté…" aria-label="Rechercher un philosophe">
+      <span class="counter" id="gCounter"></span>
+    </div>
+    <div class="chips" id="gEpoques" style="margin-bottom:24px"></div>
+    <div class="grid" id="gList"></div>
+  </section>
+
+  <!-- ŒUVRES -->
+  <section id="oeuvres" class="view" hidden>
+    <header class="sec-head"><span class="num">三</span><h2>Œuvres philosophiques</h2><p>Des ouvrages classés par thématiques. Marquez une œuvre comme lue : de +30 à +50 XP selon le niveau.</p></header>
+    <div class="toolbar">
+      <div class="chips" id="oThemes"></div>
+      <select id="oNiveau" aria-label="Filtrer par niveau"><option>Tous niveaux</option><option>Débutant</option><option>Intermédiaire</option><option>Avancé</option></select>
+    </div>
+    <div class="grid" id="oList"></div>
+  </section>
+
+  <!-- PROGRESSION -->
+  <section id="progression" class="view" hidden>
+    <header class="sec-head"><span class="num">四</span><h2>Progression</h2><p>Votre chemin philosophique, du niveau 1 au niveau 100.</p></header>
+    <div id="progBox"></div>
+  </section>
+</main>
+
+<footer>
+  <span>© 2026 Phénix Philosophique — un site d'Egor</span>
+  <button id="privacyBtn">Confidentialité &amp; données</button>
+</footer>
+
+<div class="modal" id="modal" hidden><div class="modal-card" role="dialog" aria-modal="true"><button class="close" data-close aria-label="Fermer">×</button><div id="modalBody"></div></div></div>
+<div id="toasts" aria-live="polite"></div>
+
+<script type="module">
+/* =====================================================================
+   CONFIGURATION FIREBASE
+   Remplacez ces valeurs par celles de votre projet Firebase (voir README).
+   Tant que apiKey commence par "VOTRE", le site tourne en MODE DÉMO.
+   ===================================================================== */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBNOQqQjtiiTgtrJSu_QxnP3ESfW2uff5I",
+  authDomain: "phenixphilosophique.firebaseapp.com",
+  projectId: "phenixphilosophique",
+  storageBucket: "phenixphilosophique.firebasestorage.app",
+  messagingSenderId: "221666479556",
+  appId: "1:221666479556:web:978a1b2756d48cc28da891"
+};
+
+/* ============================ DONNÉES ============================ */
+const PHILOS = [
+ {nom:"Confucius",dates:"-551 / -479",epoque:"Asie",courant:"Confucianisme",idee:"L'homme de bien se cultive par l'étude, le respect des rites et la bienveillance (ren) : l'harmonie de la société naît de la vertu de chacun.",concepts:["Ren","Rites","Piété filiale"],oeuvre:"Entretiens"},
+ {nom:"Laozi",dates:"VIe s. av. J.-C.",epoque:"Asie",courant:"Taoïsme",idee:"Le Tao, principe indicible de toute chose, se rejoint par le non-agir (wu wei) : agir sans forcer, comme l'eau qui contourne l'obstacle.",concepts:["Tao","Wu wei","Yin et yang"],oeuvre:"Tao Te King"},
+ {nom:"Socrate",dates:"-470 / -399",epoque:"Antiquité",courant:"Philosophie morale",idee:"Il affirme ne savoir qu'une chose : qu'il ne sait rien. Par le dialogue et la maïeutique, il aide ses interlocuteurs à « accoucher » de la vérité.",concepts:["Maïeutique","Ironie socratique","Connais-toi toi-même"],oeuvre:"Aucun écrit — sa pensée est rapportée par Platon"},
+ {nom:"Platon",dates:"-428 / -348",epoque:"Antiquité",courant:"Idéalisme",idee:"Le monde sensible n'est qu'un reflet du monde intelligible des Idées ; philosopher, c'est sortir de la caverne des apparences.",concepts:["Idées","Allégorie de la caverne","Réminiscence"],oeuvre:"La République"},
+ {nom:"Aristote",dates:"-384 / -322",epoque:"Antiquité",courant:"Réalisme",idee:"Le bonheur (eudaimonia) est la fin de l'existence humaine. Il s'atteint par la vertu, juste milieu entre deux excès.",concepts:["Juste milieu","Eudaimonia","Quatre causes"],oeuvre:"Éthique à Nicomaque"},
+ {nom:"Épicure",dates:"-341 / -270",epoque:"Antiquité",courant:"Épicurisme",idee:"Le bonheur est l'absence de trouble de l'âme (ataraxie) : satisfaire les désirs naturels et nécessaires, et ne pas craindre la mort.",concepts:["Ataraxie","Tetrapharmakon","Classification des désirs"],oeuvre:"Lettre à Ménécée"},
+ {nom:"Épictète",dates:"50 / 135",epoque:"Antiquité",courant:"Stoïcisme",idee:"Distinguer ce qui dépend de nous (nos jugements, nos désirs) de ce qui n'en dépend pas : là se trouve la liberté intérieure.",concepts:["Dichotomie du contrôle","Liberté intérieure"],oeuvre:"Manuel"},
+ {nom:"Marc Aurèle",dates:"121 / 180",epoque:"Antiquité",courant:"Stoïcisme",idee:"Empereur philosophe, il s'exhorte chaque jour à vivre selon la nature et la raison, avec sérénité face à l'impermanence des choses.",concepts:["Logos","Impermanence","Devoir"],oeuvre:"Pensées pour moi-même"},
+ {nom:"Augustin d'Hippone",dates:"354 / 430",epoque:"Moyen Âge",courant:"Philosophie chrétienne",idee:"La vérité se cherche en soi. Le temps n'existe que dans l'âme, tendue entre mémoire du passé, attention au présent et attente du futur.",concepts:["Intériorité","Temps","Libre arbitre"],oeuvre:"Confessions"},
+ {nom:"Dōgen",dates:"1200 / 1253",epoque:"Asie",courant:"Bouddhisme zen Sōtō",idee:"La méditation assise (zazen) n'est pas un moyen d'atteindre l'éveil : elle est déjà l'éveil. L'être et le temps ne font qu'un (uji).",concepts:["Zazen","Uji (être-temps)","Impermanence"],oeuvre:"Shōbōgenzō"},
+ {nom:"Thomas d'Aquin",dates:"1225 / 1274",epoque:"Moyen Âge",courant:"Scolastique",idee:"Foi et raison ne se contredisent pas : la raison peut démontrer l'existence de Dieu, la foi vient l'accomplir.",concepts:["Cinq voies","Loi naturelle","Analogie"],oeuvre:"Somme théologique"},
+ {nom:"Machiavel",dates:"1469 / 1527",epoque:"Renaissance",courant:"Réalisme politique",idee:"La politique se juge à son efficacité, non à la morale : le prince doit composer avec la fortune grâce à sa virtù.",concepts:["Virtù","Fortuna","Raison d'État"],oeuvre:"Le Prince"},
+ {nom:"Montaigne",dates:"1533 / 1592",epoque:"Renaissance",courant:"Humanisme, scepticisme",idee:"« Que sais-je ? » En se peignant lui-même, Montaigne explore la condition humaine, sa diversité et ses incertitudes.",concepts:["Scepticisme","Connaissance de soi","Relativisme culturel"],oeuvre:"Essais"},
+ {nom:"Thomas Hobbes",dates:"1588 / 1679",epoque:"Époque moderne",courant:"Contractualisme",idee:"À l'état de nature règne la guerre de tous contre tous ; les hommes fondent l'État par un contrat pour garantir leur sécurité.",concepts:["État de nature","Contrat social","Souveraineté"],oeuvre:"Léviathan"},
+ {nom:"René Descartes",dates:"1596 / 1650",epoque:"Époque moderne",courant:"Rationalisme",idee:"Par le doute méthodique, il découvre une première certitude inébranlable : « Je pense, donc je suis ».",concepts:["Doute méthodique","Cogito","Dualisme"],oeuvre:"Discours de la méthode"},
+ {nom:"Blaise Pascal",dates:"1623 / 1662",epoque:"Époque moderne",courant:"Pensée chrétienne",idee:"L'homme est un « roseau pensant » : grand par sa pensée, misérable par sa condition, il se divertit pour fuir sa finitude.",concepts:["Divertissement","Pari","Esprit de finesse"],oeuvre:"Pensées"},
+ {nom:"Baruch Spinoza",dates:"1632 / 1677",epoque:"Époque moderne",courant:"Rationalisme",idee:"Dieu ou la Nature : une seule substance infinie. Être libre, c'est comprendre les causes qui nous déterminent.",concepts:["Conatus","Substance","Affects"],oeuvre:"Éthique"},
+ {nom:"John Locke",dates:"1632 / 1704",epoque:"Époque moderne",courant:"Empirisme, libéralisme",idee:"À la naissance, l'esprit est une table rase : toutes nos idées viennent de l'expérience. En politique, il défend les droits naturels et la tolérance.",concepts:["Table rase","Propriété","Tolérance"],oeuvre:"Essai sur l'entendement humain"},
+ {nom:"David Hume",dates:"1711 / 1776",epoque:"Époque moderne",courant:"Empirisme",idee:"La causalité n'est qu'une habitude de l'esprit : rien dans l'expérience ne garantit que le futur ressemblera au passé.",concepts:["Habitude","Problème de l'induction","Scepticisme"],oeuvre:"Enquête sur l'entendement humain"},
+ {nom:"Jean-Jacques Rousseau",dates:"1712 / 1778",epoque:"Époque moderne",courant:"Lumières",idee:"L'homme naît bon, la société le corrompt. Un pouvoir n'est légitime que s'il repose sur la volonté générale.",concepts:["Volonté générale","Perfectibilité","État de nature"],oeuvre:"Du contrat social"},
+ {nom:"Emmanuel Kant",dates:"1724 / 1804",epoque:"Époque moderne",courant:"Criticisme",idee:"Que puis-je savoir ? Que dois-je faire ? Que m'est-il permis d'espérer ? Il fixe les limites de la raison et fonde la morale sur l'impératif catégorique.",concepts:["Impératif catégorique","Phénomène / noumène","Autonomie"],oeuvre:"Critique de la raison pure"},
+ {nom:"G. W. F. Hegel",dates:"1770 / 1831",epoque:"XIXe siècle",courant:"Idéalisme allemand",idee:"L'Esprit se réalise dans l'histoire par un mouvement dialectique où chaque contradiction est dépassée.",concepts:["Dialectique","Esprit","Maître et esclave"],oeuvre:"Phénoménologie de l'esprit"},
+ {nom:"Arthur Schopenhauer",dates:"1788 / 1860",epoque:"XIXe siècle",courant:"Pessimisme",idee:"Le monde est l'expression d'une volonté aveugle ; la vie oscille comme un pendule entre la souffrance et l'ennui.",concepts:["Vouloir-vivre","Représentation","Compassion"],oeuvre:"Le Monde comme volonté et comme représentation"},
+ {nom:"Søren Kierkegaard",dates:"1813 / 1855",epoque:"XIXe siècle",courant:"Existentialisme chrétien",idee:"Exister, c'est choisir ; l'angoisse est le vertige de la liberté. Il distingue les stades esthétique, éthique et religieux.",concepts:["Angoisse","Choix","Trois stades"],oeuvre:"Le Concept de l'angoisse"},
+ {nom:"Karl Marx",dates:"1818 / 1883",epoque:"XIXe siècle",courant:"Matérialisme historique",idee:"L'histoire est celle de la lutte des classes : ce sont les conditions matérielles d'existence qui déterminent la conscience.",concepts:["Lutte des classes","Aliénation","Plus-value"],oeuvre:"Le Capital"},
+ {nom:"Friedrich Nietzsche",dates:"1844 / 1900",epoque:"XIXe siècle",courant:"Philosophie du soupçon",idee:"Après la « mort de Dieu », il faut créer de nouvelles valeurs, affirmer la vie et devenir ce que l'on est.",concepts:["Volonté de puissance","Surhomme","Éternel retour"],oeuvre:"Ainsi parlait Zarathoustra"},
+ {nom:"Henri Bergson",dates:"1859 / 1941",epoque:"XXe siècle",courant:"Spiritualisme",idee:"La durée vécue n'est pas le temps mesurable des horloges ; seule l'intuition saisit le mouvement de la vie.",concepts:["Durée","Intuition","Élan vital"],oeuvre:"L'Évolution créatrice"},
+ {nom:"Nishida Kitarō",dates:"1870 / 1945",epoque:"Asie",courant:"École de Kyoto",idee:"Avant toute distinction entre sujet et objet, il y a l'« expérience pure » ; il pense le réel à partir du « lieu » (basho) du néant.",concepts:["Expérience pure","Basho","Néant absolu"],oeuvre:"Essai sur le bien"},
+ {nom:"Martin Heidegger",dates:"1889 / 1976",epoque:"XXe siècle",courant:"Phénoménologie",idee:"L'homme est le Dasein, l'être-là qui s'interroge sur l'être ; il est un être-pour-la-mort.",concepts:["Dasein","Être-pour-la-mort","Authenticité"],oeuvre:"Être et Temps"},
+ {nom:"Jean-Paul Sartre",dates:"1905 / 1980",epoque:"XXe siècle",courant:"Existentialisme",idee:"L'existence précède l'essence : l'homme n'est rien d'autre que ce qu'il se fait. Il est condamné à être libre.",concepts:["Liberté","Mauvaise foi","Engagement"],oeuvre:"L'Être et le Néant"},
+ {nom:"Hannah Arendt",dates:"1906 / 1975",epoque:"XXe siècle",courant:"Philosophie politique",idee:"Elle analyse le totalitarisme et la banalité du mal ; l'action politique, parmi les autres, est le lieu de la liberté humaine.",concepts:["Banalité du mal","Action","Totalitarisme"],oeuvre:"La Condition de l'homme moderne"},
+ {nom:"Simone de Beauvoir",dates:"1908 / 1986",epoque:"XXe siècle",courant:"Existentialisme, féminisme",idee:"On ne naît pas femme, on le devient : la condition féminine est une construction sociale et historique.",concepts:["Construction sociale","Liberté","Altérité"],oeuvre:"Le Deuxième Sexe"},
+ {nom:"Albert Camus",dates:"1913 / 1960",epoque:"XXe siècle",courant:"Philosophie de l'absurde",idee:"L'absurde naît de la confrontation entre l'appel humain au sens et le silence du monde ; il faut imaginer Sisyphe heureux.",concepts:["Absurde","Révolte","Lucidité"],oeuvre:"Le Mythe de Sisyphe"},
+ {nom:"Michel Foucault",dates:"1926 / 1984",epoque:"XXe siècle",courant:"Post-structuralisme",idee:"Le pouvoir n'est pas seulement répressif : il circule partout, produit des savoirs et discipline les corps.",concepts:["Biopouvoir","Discipline","Archéologie du savoir"],oeuvre:"Surveiller et punir"}
+];
+
+const OEUVRES = [
+ {titre:"Apologie de Socrate",auteur:"Platon",annee:"IVe s. av. J.-C.",theme:"Morale",niveau:"Débutant",resume:"Le procès de Socrate : sa défense devant les juges d'Athènes est une porte d'entrée idéale dans la philosophie."},
+ {titre:"La République",auteur:"Platon",annee:"vers -375",theme:"Politique",niveau:"Intermédiaire",resume:"Qu'est-ce que la justice ? Platon imagine une cité idéale gouvernée par les philosophes. Contient l'allégorie de la caverne."},
+ {titre:"Éthique à Nicomaque",auteur:"Aristote",annee:"IVe s. av. J.-C.",theme:"Morale",niveau:"Intermédiaire",resume:"Une enquête sur le bonheur et la vertu comme juste milieu, avec de belles pages sur l'amitié."},
+ {titre:"Lettre à Ménécée",auteur:"Épicure",annee:"IIIe s. av. J.-C.",theme:"Morale",niveau:"Débutant",resume:"Quelques pages pour apprendre à vivre heureux : ne pas craindre les dieux ni la mort, et bien choisir ses désirs."},
+ {titre:"Manuel",auteur:"Épictète",annee:"IIe s.",theme:"Morale",niveau:"Débutant",resume:"Le petit guide pratique du stoïcisme : distinguer ce qui dépend de nous de ce qui n'en dépend pas."},
+ {titre:"Pensées pour moi-même",auteur:"Marc Aurèle",annee:"IIe s.",theme:"Existence",niveau:"Débutant",resume:"Le carnet intime d'un empereur qui s'exerce chaque jour à la sagesse stoïcienne."},
+ {titre:"Confessions",auteur:"Augustin d'Hippone",annee:"vers 400",theme:"Métaphysique",niveau:"Intermédiaire",resume:"Autobiographie spirituelle et méditation célèbre sur la nature du temps (livre XI)."},
+ {titre:"Le Prince",auteur:"Machiavel",annee:"1532",theme:"Politique",niveau:"Débutant",resume:"Comment conquérir et conserver le pouvoir ? Un traité lucide qui sépare la politique de la morale."},
+ {titre:"Essais",auteur:"Montaigne",annee:"1580",theme:"Existence",niveau:"Intermédiaire",resume:"Un livre où l'auteur se prend lui-même pour sujet et interroge la mort, l'amitié, l'éducation, la coutume."},
+ {titre:"Léviathan",auteur:"Thomas Hobbes",annee:"1651",theme:"Politique",niveau:"Avancé",resume:"Fondement de la théorie du contrat : sans État souverain, la vie humaine serait solitaire, brutale et courte."},
+ {titre:"Discours de la méthode",auteur:"René Descartes",annee:"1637",theme:"Connaissance",niveau:"Débutant",resume:"Quatre règles pour bien conduire sa raison, et la découverte du cogito."},
+ {titre:"Méditations métaphysiques",auteur:"René Descartes",annee:"1641",theme:"Métaphysique",niveau:"Intermédiaire",resume:"Six méditations pour douter de tout et reconstruire la connaissance sur des bases certaines."},
+ {titre:"Pensées",auteur:"Blaise Pascal",annee:"1670",theme:"Existence",niveau:"Intermédiaire",resume:"Fragments sur la grandeur et la misère de l'homme, le divertissement et le pari."},
+ {titre:"Éthique",auteur:"Baruch Spinoza",annee:"1677",theme:"Métaphysique",niveau:"Avancé",resume:"Démontrée « à la manière des géomètres » : de la nature de Dieu jusqu'à la joie et la liberté humaine."},
+ {titre:"Enquête sur l'entendement humain",auteur:"David Hume",annee:"1748",theme:"Connaissance",niveau:"Intermédiaire",resume:"D'où viennent nos idées ? Une critique décisive de la causalité et de l'induction."},
+ {titre:"Du contrat social",auteur:"Jean-Jacques Rousseau",annee:"1762",theme:"Politique",niveau:"Intermédiaire",resume:"Comment un pouvoir peut-il être légitime ? La réponse de Rousseau : la volonté générale."},
+ {titre:"Fondements de la métaphysique des mœurs",auteur:"Emmanuel Kant",annee:"1785",theme:"Morale",niveau:"Intermédiaire",resume:"L'introduction la plus accessible à la morale kantienne et à l'impératif catégorique."},
+ {titre:"Critique de la raison pure",auteur:"Emmanuel Kant",annee:"1781",theme:"Connaissance",niveau:"Avancé",resume:"Que pouvons-nous connaître ? Un monument qui fixe les limites de la raison humaine."},
+ {titre:"Phénoménologie de l'esprit",auteur:"G. W. F. Hegel",annee:"1807",theme:"Métaphysique",niveau:"Avancé",resume:"Le parcours de la conscience jusqu'au savoir absolu, avec la célèbre dialectique du maître et de l'esclave."},
+ {titre:"Ainsi parlait Zarathoustra",auteur:"Friedrich Nietzsche",annee:"1883",theme:"Existence",niveau:"Intermédiaire",resume:"Un poème philosophique qui annonce le surhomme et l'éternel retour."},
+ {titre:"Le Mythe de Sisyphe",auteur:"Albert Camus",annee:"1942",theme:"Existence",niveau:"Débutant",resume:"Face à l'absurde, faut-il renoncer ? Camus répond par la révolte et la lucidité."},
+ {titre:"L'existentialisme est un humanisme",auteur:"Jean-Paul Sartre",annee:"1946",theme:"Existence",niveau:"Débutant",resume:"Une conférence claire et courte qui résume l'existentialisme : liberté, responsabilité, engagement."},
+ {titre:"Le Deuxième Sexe",auteur:"Simone de Beauvoir",annee:"1949",theme:"Politique",niveau:"Intermédiaire",resume:"Une analyse fondatrice de la condition des femmes comme construction historique et sociale."},
+ {titre:"Surveiller et punir",auteur:"Michel Foucault",annee:"1975",theme:"Politique",niveau:"Avancé",resume:"Du supplice à la prison : comment les sociétés modernes surveillent et disciplinent les corps."},
+ {titre:"Tao Te King",auteur:"Laozi",annee:"VIe–IVe s. av. J.-C.",theme:"Sagesses d'Asie",niveau:"Débutant",resume:"81 courts chapitres sur la Voie, le non-agir et l'humilité de l'eau."},
+ {titre:"Entretiens",auteur:"Confucius",annee:"Ve s. av. J.-C.",theme:"Sagesses d'Asie",niveau:"Débutant",resume:"Paroles recueillies par ses disciples sur l'étude, la vertu et le bon gouvernement."},
+ {titre:"Shōbōgenzō",auteur:"Dōgen",annee:"1231–1253",theme:"Sagesses d'Asie",niveau:"Avancé",resume:"Le « Trésor de l'œil de la vraie Loi », texte majeur du zen japonais sur la pratique et l'être-temps."},
+ {titre:"Essai sur le bien",auteur:"Nishida Kitarō",annee:"1911",theme:"Sagesses d'Asie",niveau:"Avancé",resume:"Première grande œuvre de la philosophie japonaise moderne, autour de la notion d'expérience pure."}
+];
+
+const QUIZ = [
+ {q:"Qui a écrit le « Discours de la méthode » ?",opts:["Spinoza","Descartes","Pascal","Kant"],a:1,exp:"Descartes, en 1637, y expose sa méthode et le célèbre cogito."},
+ {q:"Chez Épicure, l'ataraxie désigne…",opts:["La recherche de tous les plaisirs","L'absence de troubles de l'âme","Le mépris du corps","La soumission au destin"],a:1,exp:"Le sage épicurien vise une paix intérieure, pas l'accumulation des plaisirs."},
+ {q:"Dans l'allégorie de la caverne, les ombres représentent…",opts:["Les Idées","Les dieux","Les apparences sensibles","Les philosophes"],a:2,exp:"Les prisonniers prennent les ombres (le sensible) pour la réalité."},
+ {q:"Le wu wei du taoïsme signifie…",opts:["Le non-agir","La guerre juste","La piété filiale","La méditation assise"],a:0,exp:"Agir sans forcer, en accord avec le cours naturel des choses."},
+ {q:"Selon Sartre, l'existence…",opts:["Est absurde","Est déterminée","Précède l'essence","Est une illusion"],a:2,exp:"L'homme existe d'abord, puis se définit par ses choix."},
+ {q:"Qui a formulé l'impératif catégorique ?",opts:["Hume","Hegel","Rousseau","Kant"],a:3,exp:"Kant : agis selon une maxime que tu pourrais vouloir universelle."},
+ {q:"Pour les stoïciens, la sagesse commence par distinguer…",opts:["Le vrai et le faux","Ce qui dépend de nous et ce qui n'en dépend pas","Le corps et l'âme","Le bien et le beau"],a:1,exp:"C'est la première phrase du Manuel d'Épictète."},
+ {q:"Qui a écrit « Le Prince » ?",opts:["Machiavel","Montaigne","Hobbes","Érasme"],a:0,exp:"Machiavel, publié en 1532, après sa mort."},
+ {q:"Chez Spinoza, le conatus est…",opts:["La grâce divine","L'effort de chaque chose pour persévérer dans son être","Le doute méthodique","La volonté générale"],a:1,exp:"C'est l'essence même de chaque être selon l'Éthique."},
+ {q:"Quel mythe Camus choisit-il pour illustrer l'absurde ?",opts:["Prométhée","Icare","Sisyphe","Narcisse"],a:2,exp:"Sisyphe roule éternellement son rocher : « il faut l'imaginer heureux »."},
+ {q:"Selon Hume, notre idée de causalité vient…",opts:["De la raison pure","De Dieu","De l'habitude","Des Idées innées"],a:2,exp:"Nous voyons des événements se succéder et l'habitude nous fait attendre la suite."},
+ {q:"Qui a théorisé la « volonté générale » ?",opts:["Locke","Rousseau","Montesquieu","Hobbes"],a:1,exp:"Rousseau, dans Du contrat social (1762)."}
+];
+
+const FORUM_CATS = ["Général","Morale","Politique","Métaphysique","Connaissance","Existence","Lectures"];
+const EPOQUES = ["Toutes","Antiquité","Moyen Âge","Renaissance","Époque moderne","XIXe siècle","XXe siècle","Asie"];
+const THEMES = ["Toutes","Morale","Politique","Métaphysique","Connaissance","Existence","Sagesses d'Asie"];
+const XP_NIVEAU = {"Débutant":30,"Intermédiaire":40,"Avancé":50};
+
+/* ============================ OUTILS ============================ */
+const $ = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const norm = s => String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+const slug = s => norm(s).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+const today = () => new Date().toLocaleDateString("fr-CA");
+const DF = new Intl.DateTimeFormat("fr-FR",{day:"numeric",month:"short",year:"numeric"});
+const fmt = ms => DF.format(new Date(ms || Date.now()));
+PHILOS.forEach(p=>p.id=slug(p.nom));
+OEUVRES.forEach(o=>o.id=slug(o.titre+"-"+o.auteur));
+
+/* ======================== XP & NIVEAUX ======================== */
+const MAX_LEVEL = 100, FORUM_CAP = 100;
+const xpFor = L => Math.round(15 * Math.pow(L-1, 1.5));      // XP total pour atteindre le niveau L (niveau 100 ≈ 14 800 XP)
+const levelOf = xp => { let L=1; while(L<MAX_LEVEL && xp>=xpFor(L+1)) L++; return L; };
+const RANKS = [[1,"Apprenti"],[10,"Disciple"],[25,"Penseur"],[50,"Philosophe"],[75,"Sage"],[100,"Phénix"]];
+const rankOf = L => RANKS.filter(r=>L>=r[0]).pop()[1];
+const BADGES = [
+ {k:"始",nom:"Premier pas",desc:"Rejoindre le Phénix",t:p=>true},
+ {k:"問",nom:"Curieux",desc:"Étudier 5 philosophes",t:p=>p.studied.length>=5},
+ {k:"知",nom:"Encyclopédiste",desc:"Étudier 20 philosophes",t:p=>p.studied.length>=20},
+ {k:"読",nom:"Lecteur",desc:"Lire 5 œuvres",t:p=>p.read.length>=5},
+ {k:"書",nom:"Lettré",desc:"Lire 15 œuvres",t:p=>p.read.length>=15},
+ {k:"話",nom:"Orateur",desc:"Publier 10 messages",t:p=>p.posts+p.replies>=10},
+ {k:"弟",nom:"Disciple",desc:"Atteindre le niveau 10",t:p=>levelOf(p.xp)>=10},
+ {k:"賢",nom:"Sage",desc:"Atteindre le niveau 50",t:p=>levelOf(p.xp)>=50},
+ {k:"鳳",nom:"Phénix",desc:"Atteindre le niveau 100",t:p=>levelOf(p.xp)>=100}
+];
+
+/* ======================== UI de base ======================== */
+function toast(msg, big){
+  const t=document.createElement("div"); t.className="toast"+(big?" big":""); t.textContent=msg;
+  $("#toasts").append(t); setTimeout(()=>t.classList.add("out"),3000); setTimeout(()=>t.remove(),3500);
+}
+function openModal(html){ $("#modalBody").innerHTML=html; $("#modal").hidden=false; document.body.style.overflow="hidden"; }
+function closeModal(){ $("#modal").hidden=true; document.body.style.overflow=""; }
+const avatar = u => `<span class="avatar">${u.photo?`<img src="${esc(u.photo)}" alt="" referrerpolicy="no-referrer">`:esc((u.name||"?")[0].toUpperCase())}</span>`;
+const loginPrompt = txt => `<p class="muted" style="margin-top:20px">${txt}</p><div style="margin-top:12px"><button class="btn solid" data-login>Se connecter avec Google</button></div>`;
+
+/* ======================== STOCKAGE ======================== */
+// --- Mode démo : tout est gardé dans le navigateur (localStorage) ---
+function demoStore(){
+  const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+  let listener=()=>{};
+  if(!ls.get("pp_threads",null)){
+    const h=36e5;
+    ls.set("pp_threads",[
+      {id:"t1",title:"Bienvenue ! Présentez-vous ici",category:"Général",body:"Bonjour à toutes et à tous,\n\nJe suis Egor, j'ai créé ce site pour partager ma passion. Dites-nous qui vous êtes et quel philosophe vous a donné envie de commencer.",uid:"egor",authorName:"Egor",createdAt:Date.now()-72*h,replies:[{body:"Pour moi c'est Épicure : sa Lettre à Ménécée m'a surpris par sa simplicité.",uid:"x",authorName:"Clara",createdAt:Date.now()-60*h}]},
+      {id:"t2",title:"Peut-on être heureux sans être libre ?",category:"Morale",body:"Les stoïciens disent que la liberté est intérieure. Mais un prisonnier peut-il vraiment être heureux ? Qu'en pensez-vous ?",uid:"egor",authorName:"Egor",createdAt:Date.now()-30*h,replies:[]},
+      {id:"t3",title:"Par quel livre commencer ?",category:"Lectures",body:"Je débute complètement. Quel livre conseilleriez-vous pour une première lecture ?",uid:"y",authorName:"Samir",createdAt:Date.now()-5*h,replies:[{body:"L'Apologie de Socrate, sans hésiter : court, vivant et fondateur.",uid:"egor",authorName:"Egor",createdAt:Date.now()-4*h}]}
+    ]);
+  }
+  return {
+    demo:true,
+    onAuth(cb){ listener=cb; cb(ls.get("pp_user",null)); },
+    signIn(){ return new Promise(res=>{
+      openModal(`<p class="kicker">Mode démonstration</p><h2 class="m-title">Connexion simulée</h2><p class="muted">Firebase n'est pas encore configuré : choisissez un pseudonyme pour tester le site. Une fois Firebase branché, ce bouton ouvrira la vraie connexion Google.</p>
+      <form class="form" id="demoLogin"><label>Pseudonyme<input name="n" required maxlength="30" value="Lecteur"></label><div class="row"><button class="btn solid">Entrer</button></div></form>`);
+      $("#demoLogin").addEventListener("submit",e=>{e.preventDefault();const name=e.target.n.value.trim();if(!name)return;
+        const u={uid:"demo-"+slug(name),name,photo:""};ls.set("pp_user",u);closeModal();listener(u);res();});
+    });},
+    async signOut(){ ls.set("pp_user",null); listener(null); },
+    async loadProfile(u){ return ls.get("pp_profile_"+u.uid,null); },
+    async saveProfile(uid,p){ ls.set("pp_profile_"+uid,p); },
+    async listThreads(){ return ls.get("pp_threads",[]).map(({replies,...t})=>({...t,replyCount:(replies||[]).length})).sort((a,b)=>b.createdAt-a.createdAt); },
+    async listReplies(id){ return (ls.get("pp_threads",[]).find(t=>t.id===id)||{}).replies||[]; },
+    async createThread(t){ const all=ls.get("pp_threads",[]); const id="t"+Date.now(); all.push({...t,id,createdAt:Date.now(),replies:[]}); ls.set("pp_threads",all); return id; },
+    async addReply(id,r){ const all=ls.get("pp_threads",[]); const t=all.find(x=>x.id===id); if(t){t.replies.push({...r,createdAt:Date.now()}); ls.set("pp_threads",all);} }
+  };
+}
+
+// --- Mode réel : Firebase (connexion Google + base Firestore) ---
+async function firebaseStore(cfg){
+  const base="https://www.gstatic.com/firebasejs/10.12.2/";
+  const [{initializeApp},A,F]=await Promise.all([import(base+"firebase-app.js"),import(base+"firebase-auth.js"),import(base+"firebase-firestore.js")]);
+  const app=initializeApp(cfg), auth=A.getAuth(app), db=F.getFirestore(app), provider=new A.GoogleAuthProvider();
+  const ts=v=>v&&v.toMillis?v.toMillis():(typeof v==="number"?v:Date.now());
+  return {
+    demo:false,
+    onAuth:cb=>A.onAuthStateChanged(auth,u=>cb(u?{uid:u.uid,name:u.displayName||"Membre",photo:u.photoURL||""}:null)),
+    signIn:()=>A.signInWithPopup(auth,provider),
+    signOut:()=>A.signOut(auth),
+    async loadProfile(u){ const s=await F.getDoc(F.doc(db,"users",u.uid)); return s.exists()?s.data():null; },
+    saveProfile:(uid,p)=>F.setDoc(F.doc(db,"users",uid),p),
+    async listThreads(){ const s=await F.getDocs(F.query(F.collection(db,"threads"),F.orderBy("createdAt","desc"),F.limit(100))); return s.docs.map(d=>({id:d.id,...d.data(),createdAt:ts(d.data().createdAt)})); },
+    async listReplies(id){ const s=await F.getDocs(F.query(F.collection(db,"threads",id,"replies"),F.orderBy("createdAt","asc"))); return s.docs.map(d=>({...d.data(),createdAt:ts(d.data().createdAt)})); },
+    async createThread(t){ const r=await F.addDoc(F.collection(db,"threads"),{...t,replyCount:0,createdAt:F.serverTimestamp()}); return r.id; },
+    async addReply(id,r){ await F.addDoc(F.collection(db,"threads",id,"replies"),{...r,createdAt:F.serverTimestamp()}); await F.updateDoc(F.doc(db,"threads",id),{replyCount:F.increment(1)}); }
+  };
+}
+
+/* ======================== ÉTAT & PROFIL ======================== */
+const state = { user:null, profile:null, threads:[], fCat:"Tout", gEpoque:"Toutes", oTheme:"Toutes" };
+const newProfile = u => ({name:u.name,photo:u.photo,xp:0,studied:[],read:[],posts:0,replies:0,quizDay:"",forumDay:"",forumToday:0,history:[],createdAt:Date.now()});
+
+async function award(amount,label){
+  const p=state.profile; if(!p) return;
+  const before=levelOf(p.xp), badgesBefore=BADGES.filter(b=>b.t(p)).length;
+  p.xp+=amount;
+  p.history.unshift({label,amount,at:Date.now()}); p.history=p.history.slice(0,30);
+  try{ await store.saveProfile(state.user.uid,p); }catch(e){ console.error(e); toast("Sauvegarde impossible pour le moment."); }
+  toast(`+${amount} XP · ${label}`);
+  const after=levelOf(p.xp);
+  if(after>before) setTimeout(()=>toast(`Niveau ${after} atteint — ${rankOf(after)}`,true),400);
+  if(BADGES.filter(b=>b.t(p)).length>badgesBefore) setTimeout(()=>toast("Nouveau sceau obtenu — voir Progression",true),800);
+  renderAuth();
+  if(currentView()==="progression") renderProgression();
+}
+async function forumAward(n,label){
+  const p=state.profile;
+  if(p.forumDay!==today()){ p.forumDay=today(); p.forumToday=0; }
+  const g=Math.min(n,FORUM_CAP-p.forumToday);
+  if(g<=0){ await store.saveProfile(state.user.uid,p).catch(()=>{}); toast("Plafond de 100 XP forum atteint pour aujourd'hui"); return; }
+  p.forumToday+=g; await award(g,label);
+}
+function needLogin(msg){ openModal(`<h2 class="m-title">Connexion requise</h2>${loginPrompt(msg)}`); }
+
+/* ======================== RENDUS ======================== */
+function renderAuth(){
+  const box=$("#authBox");
+  if(!state.user){ box.innerHTML=`<button class="btn solid sm" data-login>Connexion Google</button>`; }
+  else{
+    const L=state.profile?levelOf(state.profile.xp):1;
+    box.innerHTML=`<a href="#progression" class="me" title="Ma progression">${avatar(state.user)}<span><b>${esc(state.user.name.split(" ")[0])}</b><small>NIV. ${L}</small></span></a><button class="btn sm ghost" data-logout>Quitter</button>`;
+  }
+  $("#heroCta").innerHTML = state.user
+    ? `<a href="#progression" class="btn solid">Ma progression</a><a href="#glossaire" class="btn">Explorer le glossaire</a>`
+    : `<button class="btn solid" data-login>Créer un compte avec Google</button><a href="#glossaire" class="btn">Explorer le glossaire</a>`;
+}
+
+function renderHome(){
+  $("#homeStats").innerHTML=`<div><b>${PHILOS.length}</b><span>Philosophes</span></div><div><b>${OEUVRES.length}</b><span>Œuvres</span></div><div><b>100</b><span>Niveaux</span></div>`;
+  renderQuiz();
+}
+const quizIndex = () => Math.floor(Date.now()/864e5) % QUIZ.length;
+function renderQuiz(){
+  const Q=QUIZ[quizIndex()], done=state.profile&&state.profile.quizDay===today();
+  $("#quizBox").innerHTML=`<p class="kicker">Question du jour</p><h3>${esc(Q.q)}</h3>
+   <div class="opts">${Q.opts.map((o,k)=>`<button class="opt${done&&k===Q.a?" right":""}" data-opt="${k}" ${done?"disabled":""}>${esc(o)}</button>`).join("")}</div>
+   <p class="quiz-note">${done?"Déjà répondu aujourd'hui. "+esc(Q.exp)+" Revenez demain !":state.user?"Bonne réponse : +25 XP · participation : +5 XP":"Jouez librement — connectez-vous pour gagner de l'expérience."}</p>`;
+}
+async function answerQuiz(k){
+  const Q=QUIZ[quizIndex()];
+  if(state.profile&&state.profile.quizDay===today()) return;
+  $$(".opt").forEach((b,j)=>{ b.disabled=true; if(j===Q.a) b.classList.add("right"); else if(j===k) b.classList.add("wrong"); });
+  $(".quiz-note").textContent=(k===Q.a?"Exact. ":"Pas tout à fait. ")+Q.exp;
+  if(state.profile){ state.profile.quizDay=today(); await award(k===Q.a?25:5,k===Q.a?"Question du jour réussie":"Participation à la question du jour"); }
+}
+
+/* --- Forum --- */
+async function renderForum(){
+  $("#forumCats").innerHTML=["Tout",...FORUM_CATS].map(c=>`<button class="chip${c===state.fCat?" on":""}" data-fcat="${esc(c)}">${esc(c)}</button>`).join("");
+  $("#threadList").innerHTML=`<p class="empty">Chargement…</p>`;
+  try{ state.threads=await store.listThreads(); }catch(e){ console.error(e); $("#threadList").innerHTML=`<p class="empty">Impossible de charger le forum.</p>`; return; }
+  drawThreads();
+}
+function drawThreads(){
+  const items=state.threads.filter(t=>state.fCat==="Tout"||t.category===state.fCat);
+  $("#threadList").innerHTML=items.length?items.map(t=>`<button class="thread" data-thread="${esc(t.id)}"><div><span class="tag light">${esc(t.category)}</span><h3>${esc(t.title)}</h3><p class="meta">${esc(t.authorName)} · ${fmt(t.createdAt)}</p></div><span class="count">${t.replyCount||0}<small>réponses</small></span></button>`).join("")
+    :`<p class="empty">Aucune discussion dans cette catégorie. Lancez la première !</p>`;
+}
+function newThread(){
+  if(!state.user) return needLogin("Connectez-vous pour ouvrir une discussion.");
+  openModal(`<p class="kicker">Forum</p><h2 class="m-title">Ouvrir une discussion</h2>
+   <form class="form" id="threadForm">
+    <label>Titre<input name="title" required minlength="5" maxlength="120" placeholder="Ex. : La liberté est-elle une illusion ?"></label>
+    <label>Catégorie<select name="category">${FORUM_CATS.map(c=>`<option>${esc(c)}</option>`).join("")}</select></label>
+    <label>Message<textarea name="body" required minlength="10" maxlength="4000" placeholder="Développez votre question ou votre point de vue…"></textarea></label>
+    <div class="row"><button type="button" class="btn ghost" data-close>Annuler</button><button class="btn solid">Publier · +15 XP</button></div>
+   </form>`);
+  $("#threadForm").addEventListener("submit",async e=>{
+    e.preventDefault(); const f=e.target, btn=f.querySelector(".btn.solid"); btn.disabled=true;
+    try{
+      await store.createThread({title:f.title.value.trim(),category:f.category.value,body:f.body.value.trim(),uid:state.user.uid,authorName:state.user.name});
+      state.profile.posts++; closeModal(); await forumAward(15,"Nouvelle discussion"); state.fCat="Tout"; renderForum();
+    }catch(err){ console.error(err); btn.disabled=false; toast("Publication impossible."); }
+  });
+}
+async function openThread(id){
+  const t=state.threads.find(x=>x.id===id); if(!t) return;
+  openModal(`<p class="muted">Chargement…</p>`);
+  const replies=await store.listReplies(id).catch(()=>[]);
+  openModal(`<span class="tag">${esc(t.category)}</span><h2 class="m-title">${esc(t.title)}</h2><p class="m-meta">${esc(t.authorName)} · ${fmt(t.createdAt)}</p>
+   <div class="post-body">${esc(t.body)}</div>
+   <h4 class="sub">${replies.length} réponse${replies.length>1?"s":""}</h4>
+   ${replies.map(r=>`<div class="reply"><p class="meta"><b>${esc(r.authorName)}</b> · ${fmt(r.createdAt)}</p><div class="post-body">${esc(r.body)}</div></div>`).join("")}
+   ${state.user?`<form class="form" id="replyForm"><textarea name="body" required minlength="2" maxlength="4000" placeholder="Votre réponse…"></textarea><div class="row"><button class="btn solid">Répondre · +5 XP</button></div></form>`:loginPrompt("Connectez-vous pour participer à la discussion.")}`);
+  const form=$("#replyForm");
+  if(form) form.addEventListener("submit",async e=>{
+    e.preventDefault(); const body=form.body.value.trim(); if(body.length<2) return;
+    form.querySelector("button").disabled=true;
+    try{
+      await store.addReply(id,{body,uid:state.user.uid,authorName:state.user.name});
+      state.profile.replies++; t.replyCount=(t.replyCount||0)+1; drawThreads();
+      await forumAward(5,"Réponse sur le forum"); openThread(id);
+    }catch(err){ console.error(err); toast("Réponse impossible."); form.querySelector("button").disabled=false; }
+  });
+}
+
+/* --- Glossaire --- */
+function renderGlossaire(){
+  $("#gEpoques").innerHTML=EPOQUES.map(e=>`<button class="chip${e===state.gEpoque?" on":""}" data-epoque="${esc(e)}">${esc(e)}</button>`).join("");
+  drawPhilos();
+}
+function drawPhilos(){
+  const q=norm($("#gSearch").value.trim()), studied=state.profile?state.profile.studied:[];
+  const list=PHILOS.filter(p=>(state.gEpoque==="Toutes"||p.epoque===state.gEpoque)&&(!q||norm([p.nom,p.courant,p.idee,p.oeuvre,...p.concepts].join(" ")).includes(q)));
+  $("#gCounter").textContent = state.user ? `${studied.length} / ${PHILOS.length} étudiés` : `${list.length} résultat${list.length>1?"s":""}`;
+  $("#gList").innerHTML=list.length?list.map(p=>`<button class="card${studied.includes(p.id)?" done":""}" data-philo="${p.id}"><span class="meta">${esc(p.dates)} · ${esc(p.epoque)}</span><h3>${esc(p.nom)}</h3><span class="tag light">${esc(p.courant)}</span><p class="desc">${esc(p.idee)}</p></button>`).join("")
+    :`<p class="empty" style="grid-column:1/-1">Aucun philosophe ne correspond. Essayez un autre mot-clé.</p>`;
+}
+function openPhilo(id){
+  const p=PHILOS.find(x=>x.id===id); if(!p) return;
+  const works=OEUVRES.filter(o=>o.auteur===p.nom||p.nom.endsWith(o.auteur)||o.auteur.endsWith(p.nom));
+  const done=state.profile&&state.profile.studied.includes(id);
+  openModal(`<p class="kicker">${esc(p.epoque)} · ${esc(p.dates)}</p><h2 class="m-title">${esc(p.nom)}</h2><p class="m-meta">${esc(p.courant)}</p>
+   <p class="idea">${esc(p.idee)}</p>
+   <h4 class="sub">Concepts clés</h4><div class="tags">${p.concepts.map(c=>`<span class="tag light">${esc(c)}</span>`).join("")}</div>
+   <h4 class="sub">Œuvre majeure</h4><p>${esc(p.oeuvre)}</p>
+   ${works.length?`<h4 class="sub">Dans la bibliothèque</h4><ul class="linked">${works.map(o=>`<li>${esc(o.titre)} — <span class="muted">${esc(o.niveau)}</span></li>`).join("")}</ul>`:""}
+   <div style="margin-top:28px">${!state.user?loginPrompt("Connectez-vous pour suivre votre progression."):done?`<button class="btn" disabled>Déjà étudié 済</button>`:`<button class="btn solid" data-study="${p.id}">Marquer comme étudié · +20 XP</button>`}</div>`);
+}
+async function study(id){
+  const p=PHILOS.find(x=>x.id===id); if(!state.profile||state.profile.studied.includes(id)) return;
+  state.profile.studied.push(id); closeModal(); await award(20,`Étudié : ${p.nom}`); drawPhilos();
+}
+
+/* --- Œuvres --- */
+function renderOeuvres(){
+  $("#oThemes").innerHTML=THEMES.map(t=>`<button class="chip${t===state.oTheme?" on":""}" data-theme="${esc(t)}">${esc(t)}</button>`).join("");
+  drawOeuvres();
+}
+function drawOeuvres(){
+  const n=$("#oNiveau").value, read=state.profile?state.profile.read:[];
+  const list=OEUVRES.filter(o=>(state.oTheme==="Toutes"||o.theme===state.oTheme)&&(n==="Tous niveaux"||o.niveau===n));
+  $("#oList").innerHTML=list.length?list.map(o=>`<button class="card${read.includes(o.id)?" done":""}" data-oeuvre="${o.id}"><span class="meta">${esc(o.auteur)} · ${esc(o.annee)}</span><h3>${esc(o.titre)}</h3><div class="tags"><span class="tag">${esc(o.theme)}</span><span class="tag light">${esc(o.niveau)}</span></div><p class="desc">${esc(o.resume)}</p></button>`).join("")
+    :`<p class="empty" style="grid-column:1/-1">Aucune œuvre pour ce filtre.</p>`;
+}
+function openOeuvre(id){
+  const o=OEUVRES.find(x=>x.id===id); if(!o) return;
+  const done=state.profile&&state.profile.read.includes(id), xp=XP_NIVEAU[o.niveau];
+  openModal(`<p class="kicker">${esc(o.theme)} · ${esc(o.niveau)}</p><h2 class="m-title">${esc(o.titre)}</h2><p class="m-meta">${esc(o.auteur)} · ${esc(o.annee)}</p>
+   <p class="idea">${esc(o.resume)}</p>
+   <div style="margin-top:28px">${!state.user?loginPrompt("Connectez-vous pour enregistrer vos lectures."):done?`<button class="btn" disabled>Déjà lue 済</button>`:`<button class="btn solid" data-read="${o.id}">Marquer comme lue · +${xp} XP</button>`}</div>`);
+}
+async function markRead(id){
+  const o=OEUVRES.find(x=>x.id===id); if(!state.profile||state.profile.read.includes(id)) return;
+  state.profile.read.push(id); closeModal(); await award(XP_NIVEAU[o.niveau],`Lu : ${o.titre}`); drawOeuvres();
+}
+
+/* --- Progression --- */
+function renderProgression(){
+  const box=$("#progBox");
+  if(!state.user||!state.profile){ box.innerHTML=`<div class="empty">Créez votre compte pour commencer votre chemin philosophique.${loginPrompt("")}</div>`; return; }
+  const p=state.profile, L=levelOf(p.xp), max=L>=MAX_LEVEL;
+  const cur=p.xp-xpFor(L), need=max?1:xpFor(L+1)-xpFor(L), pct=max?100:Math.min(100,cur/need*100);
+  const C=2*Math.PI*66;
+  box.innerHTML=`<div class="prog">
+   <div>
+    <div class="level">
+      <div class="level-ring"><svg viewBox="0 0 150 150"><circle cx="75" cy="75" r="66" fill="none" stroke="var(--line)" stroke-width="3"/><circle cx="75" cy="75" r="66" fill="none" stroke="var(--ink)" stroke-width="3" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct/100)}" stroke-linecap="round"/></svg><div class="n"><div><small>NIVEAU</small>${L}</div></div></div>
+      <div><p class="kicker">Rang</p><p class="rank">${rankOf(L)}</p><p class="muted">${p.xp.toLocaleString("fr-FR")} XP au total</p></div>
+    </div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    <p class="muted" style="font-size:.84rem">${max?"Niveau maximal atteint. Vous êtes un Phénix.":`${cur.toLocaleString("fr-FR")} / ${need.toLocaleString("fr-FR")} XP vers le niveau ${L+1}`}</p>
+    <div class="kv"><div><b>${p.studied.length}</b><span>Philosophes</span></div><div><b>${p.read.length}</b><span>Œuvres lues</span></div><div><b>${p.posts+p.replies}</b><span>Messages</span></div></div>
+    <h4 class="sub">Sceaux</h4>
+    <div class="badges">${BADGES.map(b=>`<div class="badge${b.t(p)?" on":""}"><div class="seal">${b.k}</div><b>${esc(b.nom)}</b><small>${esc(b.desc)}</small></div>`).join("")}</div>
+   </div>
+   <div>
+    <h4 class="sub" style="margin-top:0">Rangs</h4>
+    <ul class="ranks">${RANKS.map((r,i)=>{const next=RANKS[i+1];const isCur=L>=r[0]&&(!next||L<next[0]);return `<li class="${isCur?"cur":""}"><span>${r[1]}</span><span>niveau ${r[0]}${next?"–"+(next[0]-1):""}</span></li>`}).join("")}</ul>
+    <h4 class="sub">Gagner de l'expérience</h4>
+    <ul class="ranks"><li><span>Question du jour réussie</span><span>+25</span></li><li><span>Philosophe étudié</span><span>+20</span></li><li><span>Œuvre lue</span><span>+30 à +50</span></li><li><span>Nouvelle discussion</span><span>+15</span></li><li><span>Réponse au forum</span><span>+5</span></li></ul>
+    <h4 class="sub">Activité récente</h4>
+    <ul class="history">${p.history.length?p.history.slice(0,12).map(h=>`<li><span>${esc(h.label)}<br><small class="muted">${fmt(h.at)}</small></span><b>+${h.amount}</b></li>`).join(""):`<li class="muted">Aucune activité pour le moment.</li>`}</ul>
+   </div></div>`;
+}
+
+/* ======================== NAVIGATION ======================== */
+const VIEWS=["accueil","forum","glossaire","oeuvres","progression"];
+const currentView=()=>{const h=location.hash.slice(1);return VIEWS.includes(h)?h:"accueil";};
+const RENDER={accueil:renderHome,forum:renderForum,glossaire:renderGlossaire,oeuvres:renderOeuvres,progression:renderProgression};
+function route(){
+  const v=currentView();
+  $$(".view").forEach(s=>s.hidden=s.id!==v);
+  $$("#nav a").forEach(a=>a.classList.toggle("active",a.getAttribute("href")==="#"+v));
+  $("#nav").classList.remove("open");
+  RENDER[v]();
+  window.scrollTo(0,0);
+}
+
+/* ======================== ÉVÉNEMENTS ======================== */
+document.addEventListener("click",async e=>{
+  const t=e.target.closest("button,a"); if(!t) return;
+  const d=t.dataset;
+  if("login" in d){ e.preventDefault(); closeModal(); try{ await store.signIn(); }catch(err){ console.error(err); toast(err.code==="auth/unauthorized-domain"?"Domaine non autorisé dans Firebase (voir README).":"Connexion annulée ou impossible."); } }
+  else if("logout" in d){ await store.signOut(); toast("À bientôt !"); }
+  else if("close" in d){ closeModal(); }
+  else if(d.opt!==undefined){ answerQuiz(+d.opt); }
+  else if(d.fcat){ state.fCat=d.fcat; $$("#forumCats .chip").forEach(c=>c.classList.toggle("on",c.dataset.fcat===d.fcat)); drawThreads(); }
+  else if(d.thread){ openThread(d.thread); }
+  else if(d.epoque){ state.gEpoque=d.epoque; $$("#gEpoques .chip").forEach(c=>c.classList.toggle("on",c.dataset.epoque===d.epoque)); drawPhilos(); }
+  else if(d.philo){ openPhilo(d.philo); }
+  else if(d.study){ study(d.study); }
+  else if(d.theme){ state.oTheme=d.theme; $$("#oThemes .chip").forEach(c=>c.classList.toggle("on",c.dataset.theme===d.theme)); drawOeuvres(); }
+  else if(d.oeuvre){ openOeuvre(d.oeuvre); }
+  else if(d.read){ markRead(d.read); }
+});
+$("#modal").addEventListener("click",e=>{ if(e.target.id==="modal") closeModal(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeModal(); });
+$("#burger").addEventListener("click",()=>$("#nav").classList.toggle("open"));
+$("#newThreadBtn").addEventListener("click",newThread);
+$("#gSearch").addEventListener("input",drawPhilos);
+$("#oNiveau").addEventListener("change",drawOeuvres);
+$("#privacyBtn").addEventListener("click",()=>openModal(`<p class="kicker">Transparence</p><h2 class="m-title">Confidentialité &amp; données</h2>
+  <p>Lors de la connexion avec Google, ce site reçoit uniquement votre nom, votre photo de profil et un identifiant technique. Ils servent à afficher votre profil, vos messages et votre progression.</p><br>
+  <p>Vos messages du forum sont publics. Votre progression n'est visible que par vous. Aucune donnée n'est revendue ni utilisée à des fins publicitaires.</p><br>
+  <p>Pour faire supprimer votre compte et vos données, contactez l'administrateur du site.</p>`));
+window.addEventListener("hashchange",route);
+
+/* ======================== DÉMARRAGE ======================== */
+const CONFIGURED=!String(FIREBASE_CONFIG.apiKey).startsWith("VOTRE");
+let store;
+try{ store = CONFIGURED ? await firebaseStore(FIREBASE_CONFIG) : demoStore(); }
+catch(err){ console.error("Firebase indisponible, passage en mode démo :",err); store=demoStore(); }
+$("#demoBanner").hidden=!store.demo;
+
+renderAuth(); route();
+store.onAuth(async u=>{
+  state.user=u; state.profile=null;
+  if(u){
+    try{
+      const saved=await store.loadProfile(u);
+      state.profile={...newProfile(u),...(saved||{}),name:u.name,photo:u.photo};
+      if(!saved){ await award(10,"Bienvenue au Phénix"); toast(`Bienvenue, ${u.name.split(" ")[0]} !`,true); }
+    }catch(err){ console.error(err); toast("Impossible de charger votre profil."); }
+  }
+  renderAuth(); route();
+});
+</script>
+</body>
+</html>
